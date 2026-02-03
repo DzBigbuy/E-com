@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>طلبات التعامل - DzBigbuy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-main">
+                <div class="logo-wrapper">
+                    <a href="index.html" class="logo">DzBigbuy</a>
+                    <span class="tagline">موقع الوساطة الأول<br>في الجزائر</span>
+                </div>
+                <div id="auth-container">
+                    <!-- This will be populated by script.js -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 2rem; padding-bottom: 2rem;">
+        <h2 class="table-main-title">طلبات التعامل الواردة</h2>
+        <p style="color: var(--muted-foreground); margin-bottom: 2rem;">هنا تظهر الطلبات المعلقة من المستخدمين الذين يرغبون بالتعامل معك. يمكنك قبول الطلب لبدء معاملة جديدة أو رفضه.</p>
+        <div id="requests-container">
+            <p style="text-align: center; color: var(--muted-foreground);">جاري تحميل الطلبات...</p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 DzBigbuy. جميع الحقوق محفوظة. <a href="admin.html" style="color: var(--muted-foreground);">معلومات</a></p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="requests.js"></script>
+</body>
+</html>

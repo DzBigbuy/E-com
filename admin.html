@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - DzBigbuy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-main">
+                <div class="logo-wrapper">
+                    <a href="index.html" class="logo">DzBigbuy</a>
+                    <span class="tagline">لوحة التحكم</span>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- حاوية الإشعارات -->
+    <div id="toast-container" style="
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      width: 300px;
+      z-index: 9999;
+    "></div>
+
+    <main class="container" style="padding-top: 2rem; padding-bottom: 2rem;">
+        
+        <div id="admin-login-section">
+            <div class="auth-page" style="padding-top: 0;">
+                <div class="auth-card">
+                    <h1 class="auth-title">دخول المدير</h1>
+                    <form id="admin-login-form" class="auth-form">
+                        <div class="form-group">
+                            <label for="admin-email">البريد الإلكتروني</label>
+                            <input type="email" id="admin-email" value="tarek@gmail.com" required dir="ltr" class="text-left">
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-password">كلمة المرور</label>
+                            <input type="password" id="admin-password" value="tarek2021" required dir="ltr" class="text-left">
+                        </div>
+                        <div id="admin-error-message" class="error-message"></div>
+                        <button type="submit" class="auth-button">تسجيل الدخول</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="admin-dashboard-section" style="display: none;">
+            <button id="admin-logout-btn" class="logout-btn" style="margin-bottom: 2rem;">تسجيل الخروج</button>
+
+            <div class="tabs-container">
+                <button class="tab-btn active" data-tab-target="#payments-content">
+                    إثباتات الدفع
+                     <div id="chat-icon" class="icon-wrapper" style="display: inline-block; margin-right: 8px;">
+                      💬
+                      <span id="chat-badge" class="badge" style="display:none;">0</span>
+                    </div>
+                </button>
+                <button class="tab-btn" data-tab-target="#users-content">بيانات المستخدمين</button>
+                <button class="tab-btn" data-tab-target="#ads-content">جميع الإعلانات</button>
+                <button class="tab-btn" data-tab-target="#violations-content">
+                    المخالفات
+                     <div id="violation-icon" class="icon-wrapper" style="display: inline-block; margin-right: 8px;">
+                      🚫
+                      <span id="violation-badge" class="badge" style="display:none;">0</span>
+                    </div>
+                </button>
+            </div>
+            
+             <div id="payments-content" class="tab-content active">
+                 <h2 class="table-main-title">إثباتات الدفع والمحادثات</h2>
+                <div class="table-container">
+                    <table class="activity-table payments-table">
+                        <thead>
+                            <tr>
+                                <th>المستخدم</th>
+                                <th>الإثبات</th>
+                                <th>السعر<br>(دج)</th>
+                                <th>الإعلان</th>
+                                <th>التاريخ</th>
+                                <th>الحالة</th>
+                                <th>الإجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payments-tbody">
+                            <!-- Payment data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+                 <div id="payments-placeholder">
+                     <p style="text-align: center; color: var(--muted-foreground); margin-top: 1rem;">جاري تحميل سجلات الدفع...</p>
+                </div>
+                 <div id="pagination-controls" class="pagination-controls" style="display: none; justify-content: center; align-items: center; gap: 1rem; margin-top: 1.5rem;">
+                    <button id="prev-page-btn" class="table-action-btn">السابق</button>
+                    <span id="page-info"></span>
+                    <button id="next-page-btn" class="table-action-btn">التالي</button>
+                </div>
+            </div>
+
+            <div id="users-content" class="tab-content">
+                <h2 class="table-main-title">بيانات المستخدمين</h2>
+                <div id="users-list" class="users-grid">
+                  <!-- JS will populate this with user cards -->
+                </div>
+                <div id="users-placeholder" style="display: block;">
+                    <p style="text-align: center; color: var(--muted-foreground); margin-top: 1rem;">جاري تحميل بيانات المستخدمين...</p>
+                </div>
+            </div>
+
+            <div id="ads-content" class="tab-content">
+                 <h2 class="table-main-title">جميع الإعلانات</h2>
+                <div class="table-container">
+                    <table class="activity-table">
+                        <thead>
+                            <tr>
+                                <th>العنوان</th>
+                                <th>الناشر</th>
+                                <th>السعر<br>(دج)</th>
+                                <th>تاريخ<br>النشر</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ads-tbody">
+                            <!-- Ads data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+                 <div id="ads-placeholder">
+                     <p style="text-align: center; color: var(--muted-foreground); margin-top: 1rem;">جاري تحميل الإعلانات...</p>
+                </div>
+            </div>
+
+            <div id="violations-content" class="tab-content">
+                <h2 class="table-main-title">سجل المخالفات</h2>
+                <div id="violationsContainer" class="violations-grid">
+                    <!-- JS will populate this with violation cards -->
+                </div>
+                <div id="violations-placeholder" style="display: block;">
+                    <p style="text-align: center; color: var(--muted-foreground); margin-top: 1rem;">جاري تحميل المخالفات...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 DzBigbuy. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سلعي - DzBigbuy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-main">
+                <div class="logo-wrapper">
+                    <a href="index.html" class="logo">DzBigbuy</a>
+                    <span class="tagline">موقع الوساطة الأول<br>في الجزائر</span>
+                </div>
+                <div id="auth-container">
+                    <!-- This will be populated by script.js -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 2rem; padding-bottom: 2rem;">
+        <div id="product-page-container">
+            <!-- Loading state -->
+            <div id="product-loading">
+                <p style="text-align: center; color: var(--muted-foreground);">جاري تحميل بيانات السلع...</p>
+            </div>
+
+            <!-- List View -->
+            <div id="product-list-view" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
+                    <h1 style="font-size: 1.8rem; margin: 0; color: var(--primary);">متجر السلع الخاص بك</h1>
+                    <button id="add-new-product-btn" class="auth-button" style="display: none; margin: 0;">إضافة سلعة جديدة</button>
+                </div>
+                <div id="products-grid" class="product-grid-store">
+                    <!-- Product cards will be injected here by JS -->
+                </div>
+                <div id="products-list-placeholder" style="display: none;">
+                    <p style="text-align: center; color: var(--muted-foreground); margin-top: 2rem;">لم تقم بإضافة أي سلع بعد.</p>
+                </div>
+            </div>
+
+            <!-- Detail View (Initially hidden) -->
+            <div id="product-detail-view" class="product-detail-container" style="display: none;">
+                 <button id="back-to-list-btn-detail" class="back-button" style="margin-bottom: 1rem; display: inline-block;">→ العودة للقائمة</button>
+                <div class="product-detail-grid">
+                    <!-- Image Gallery -->
+                    <div class="product-image-gallery">
+                        <div id="main-image-container" class="main-image-container">
+                            <!-- Main image will be injected by JS -->
+                        </div>
+                        <div id="thumbnail-container" class="thumbnail-container">
+                            <!-- Thumbnails will be injected by JS -->
+                        </div>
+                    </div>
+                    <!-- Product Info -->
+                    <div class="product-info-details">
+                        <h1 id="product-name-view" class="product-title-detail"></h1>
+                        <div class="info-section">
+                            <h2 class="info-section-title">الوصف</h2>
+                            <p id="product-details-view" class="product-description-detail"></p>
+                        </div>
+                        <div class="info-section">
+                             <h2 class="info-section-title">التوفر</h2>
+                             <div class="availability-grid">
+                                <div class="availability-item">
+                                    <span class="availability-label">الكمية:</span>
+                                    <strong id="product-quantity-view" class="availability-value"></strong>
+                                </div>
+                                 <div class="availability-item">
+                                    <span class="availability-label">الألوان:</span>
+                                    <strong id="product-colors-view" class="availability-value"></strong>
+                                </div>
+                                 <div class="availability-item">
+                                    <span class="availability-label">المقاسات:</span>
+                                    <strong id="product-sizes-view" class="availability-value"></strong>
+                                </div>
+                             </div>
+                        </div>
+                         <div id="product-custom-fields-view" class="info-section">
+                            <!-- Custom fields will be injected here by JS -->
+                        </div>
+                        <button id="edit-product-btn" class="auth-button" style="display: none; width: 100%; margin-top: 2rem;">تعديل بيانات السلعة</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Form View (for Add/Edit, initially hidden) -->
+            <div id="product-form-view" class="auth-card" style="display: none; max-width: 800px;">
+                <button id="back-to-list-btn-form" class="back-button" style="margin-bottom: 1rem; display: inline-block;">→ إلغاء</button>
+                <h1 id="product-form-title" class="auth-title"></h1>
+                <form id="product-edit-form" class="auth-form" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem;">
+                    <div class="form-group">
+                        <label for="productName">اسم السلعة</label>
+                        <input type="text" id="productName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productDetails">تفاصيل السلعة</label>
+                        <textarea id="productDetails" rows="5"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>صور السلعة الحالية</label>
+                        <div id="product-images-edit" class="product-images-container edit-mode"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="productImages">إضافة صور جديدة</label>
+                        <input type="file" id="productImages" class="file-input-custom" accept="image/*" multiple>
+                    </div>
+                    <div class="form-group">
+                        <label for="productColors">الألوان (افصل بفاصلة)</label>
+                        <input type="text" id="productColors">
+                    </div>
+                    <div class="form-group">
+                        <label for="productSizes">المقاسات (افصل بفاصلة)</label>
+                        <input type="text" id="productSizes">
+                    </div>
+                    <div class="form-group">
+                        <label for="productQuantity">الكمية</label>
+                        <input type="number" id="productQuantity" dir="ltr" class="text-left">
+                    </div>
+                    <div class="form-group">
+                        <label>تفاصيل إضافية</label>
+                        <div id="custom-fields-edit-container" class="custom-fields-edit-container">
+                            <!-- JS will dynamically add input pairs here -->
+                        </div>
+                        <button type="button" id="add-custom-field-btn" class="auth-button" style="margin-top: 1rem; background-color: var(--secondary); color: var(--foreground);">إضافة تفصيل جديد</button>
+                    </div>
+                    <div id="product-error-message" class="error-message"></div>
+                    <button type="submit" id="save-product-btn" class="auth-button">حفظ</button>
+                </form>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- New Modal for Image Viewer -->
+    <div id="image-viewer-modal" class="image-viewer-modal hidden">
+        <span class="image-viewer-close">&times;</span>
+        <button class="image-viewer-nav prev" title="السابق">&#10094;</button>
+        <div class="image-viewer-content">
+            <img id="modal-image-content" src="" alt="Product Image">
+            <a id="modal-download-btn" href="#" download class="modal-download-btn">⬇ تحميل الصورة</a>
+        </div>
+        <button class="image-viewer-nav next" title="التالي">&#10095;</button>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 DzBigbuy. جميع الحقوق محفوظة. <a href="admin.html" style="color: var(--muted-foreground);">معلومات</a></p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="my-product.js"></script>
+</body>
+</html>

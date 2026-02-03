@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الدفع لإتمام الصفقة - DzBigbuy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+</head>
+<body id="payment-page-body">
+    <header class="header">
+        <div class="container">
+            <div class="header-main">
+                <div class="logo-wrapper">
+                    <a href="index.html" class="logo">DzBigbuy</a>
+                    <span class="tagline">موقع الوساطة الأول<br>في الجزائر</span>
+                </div>
+                <div id="auth-container">
+                    <!-- This will be populated by script.js -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- حاوية الإشعارات -->
+    <div id="toast-container" style="
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      width: 300px;
+      z-index: 9999;
+    "></div>
+
+    <main class="container">
+        <nav class="navigation" style="justify-content: center; margin-bottom: 2rem; padding-top: 2rem;">
+            <a href="trader-ads.html">إعلانات<br>التجار</a>
+            <a href="marketer-ads.html">إعلانات<br>المسوقين</a>
+        </nav>
+        <div class="auth-page">
+            <div id="payment-page-container" class="auth-card" style="max-width: 600px;">
+                <h1 class="auth-title">الدفع لإتمام الصفقة</h1>
+                <p class="auth-subtitle">أنت على وشك تأمين صفقة <strong id="payment-ad-title" style="color: var(--primary);">...</strong></p>
+                
+                <div class="payment-info">
+                    <p>المبلغ المطلوب دفعه:</p>
+                    <strong id="payment-amount">جاري التحميل...</strong>
+                </div>
+
+                <p style="text-align: center; color: var(--muted-foreground); margin-bottom: 1rem;">
+                    لإتمام العملية، يرجى تحويل المبلغ الموضح أعلاه إلى حساب Baridimob التالي، ثم إرفاق وصل الدفع.
+                </p>
+
+                <div class="payment-info">
+                     <p>رقم الحساب (RIP):</p>
+                    <strong>00799999001234567890 12</strong>
+                </div>
+                
+                <p style="text-align: center; color: var(--muted-foreground); margin-bottom: 1rem; font-weight: bold;">
+                    ضمانك: المبلغ يبقى محفوظًا لدى المنصة. في حال عدم إتمام الصفقة بشكل مُرضي، يمكنك استرجاع المبلغ كاملاً.
+                </p>
+
+                <div id="payment-form-container" class="auth-form" style="margin-top: 2rem;">
+                    <div class="form-group">
+                        <label for="paymentProof">إرفاق إثبات الدفع</label>
+                        <input type="file" id="paymentProof" accept="image/*,application/pdf" class="file-input-custom">
+                    </div>
+                     <div id="payment-error-message" class="error-message"></div>
+                    <button type="button" id="payment-submit-btn" class="auth-button">تأكيد عملية الدفع</button>
+                </div>
+                
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 DzBigbuy. جميع الحقوق محفوظة. <a href="admin.html" style="color: var(--muted-foreground);">معلومات</a></p>
+        </div>
+    </footer>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script src="payment.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة المبيعات - DzBigbuy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-main">
+                <div class="logo-wrapper">
+                    <a href="index.html" class="logo shimmer">DzBigbuy</a>
+                    <span class="tagline">موقع الوساطة الأول<br>في الجزائر</span>
+                </div>
+                <div id="auth-container">
+                    <!-- This will be populated by script.js -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 2rem; padding-bottom: 2rem;">
+        <div id="page-content" style="display: none;">
+            <div class="auth-page" style="padding-top: 0; align-items: flex-start;">
+                <div class="auth-card" style="max-width: none;">
+                    <div style="max-width: 700px; margin: 0 auto;">
+                        <a href="#" id="back-to-transaction" class="back-button" style="margin-bottom: 1rem; display: inline-block;">→ العودة للمعاملة</a>
+                        <div id="form-section">
+                            <h1 class="auth-title">إضافة عملية بيع جديدة</h1>
+                            <p class="auth-subtitle">أدخل تفاصيل البيع لتسجيلها في النظام.</p>
+                            <form id="add-sale-form" class="auth-form">
+                                <div class="form-group">
+                                    <label for="saleImage">صورة بيانات الزبون المشتري (التي يضعها التاجر فوق طرد سلعته)</label>
+                                    <input type="file" id="saleImage" class="file-input-custom" accept="image/*" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="saleDate">التاريخ</label>
+                                    <input type="date" id="saleDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="trackingNumber">رقم التتبع</label>
+                                    <input type="text" id="trackingNumber" required placeholder="رقم تتبع الشحنة">
+                                </div>
+                                <div class="form-group">
+                                    <label for="trackingLink">رابط التتبع (اختياري)</label>
+                                    <input type="url" id="trackingLink" placeholder="https://example.com/track/..." dir="ltr" class="text-left">
+                                </div>
+                                <div id="error-message" class="error-message"></div>
+                                <button type="submit" id="submit-sale-btn" class="auth-button">تسجيل البيع</button>
+                            </form>
+                        </div>
+
+                        <div id="salesNotifications" style="margin-top: 2rem;"></div>
+                    </div>
+
+                    <h2 class="table-main-title" style="margin-top: 3rem;">المبيعات المسجلة</h2>
+                    <div class="table-container">
+                        <table class="activity-table fit-screen">
+                            <thead>
+                                <tr>
+                                    <th>رقم<br>المبيعة</th>
+                                    <th>بيانات<br>الزبون</th>
+                                    <th>رقم<br>التتبع</th>
+                                    <th>الحالة</th>
+                                    <th>التاريخ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sales-tbody">
+                                <!-- Sales will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="sales-placeholder">
+                        <p style="text-align: center; color: var(--muted-foreground); margin-top: 1rem;">لم يتم تسجيل أي مبيعات بعد.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="loading-placeholder">
+            <p style="text-align: center; color: var(--muted-foreground);">جاري تحميل البيانات...</p>
+        </div>
+         <div id="error-placeholder" style="display: none;">
+            <p style="text-align: center; color: var(--error);"></p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 DzBigbuy. جميع الحقوق محفوظة. <a href="admin.html" style="color: var(--muted-foreground);">معلومات</a></p>
+        </div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+    <script src="sales-management.js"></script>
+</body>
+</html>

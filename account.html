@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حسابي - DzBigbuy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+</head>
+<body id="account-page-body">
+    <header class="header">
+        <div class="container">
+            <div class="header-main">
+                <div class="logo-wrapper">
+                    <a href="index.html" class="logo">DzBigbuy</a>
+                    <span class="tagline">موقع الوساطة الأول<br>في الجزائر</span>
+                </div>
+                <div id="auth-container">
+                    <!-- This will be populated by script.js -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="toast-container" class="toast hidden"></div>
+
+    <main class="container" style="padding-top: 2rem; padding-bottom: 2rem;">
+        <nav class="navigation" style="justify-content: center; margin-bottom: 2rem;">
+            <a href="trader-ads.html">إعلانات<br>التجار</a>
+            <a href="marketer-ads.html">إعلانات<br>المسوقين</a>
+        </nav>
+        
+        <div class="account-tabs">
+          <button class="tab-btn active" data-tab="profile">
+            📚<br>
+            <span>ملف المستخدم</span>
+          </button>
+
+          <button class="tab-btn" data-tab="ads">
+            📢<br>
+            <span>الإعلانات</span>
+          </button>
+
+          <button class="tab-btn" data-tab="messages" id="messagesTab" style="position: relative;">
+            🤝<br>
+            <span>منصة التعاملات</span>
+            <span class="notif-badge" id="msgBadge">0</span>
+          </button>
+          
+          <a href="requests.html" class="tab-btn" id="requestsTab" style="display: none;">
+              📥<br>
+              <span>طلبات التعامل</span>
+          </a>
+
+          <a href="my-product.html" class="tab-btn" id="manage-products-tab" style="display: none;">
+              📦<br>
+              <span>إدارة السلع</span>
+          </a>
+
+          <button class="tab-btn" data-tab="inbox" id="inboxTab" style="display: none;">
+            📧<br>
+            <span>صندوق البريد</span>
+          </button>
+        </div>
+
+        <!-- المحتويات -->
+        <div class="tab-content" id="profile" style="display: block;">
+            <div class="account-card" style="margin-bottom: 0;">
+                 <div class="profile-header">
+                    <div id="profileAvatarLarge" class="avatar-large">?</div>
+                    <div>
+                        <h2 id="profile-name-title">جاري التحميل...</h2>
+                        <label for="avatarInput" class="upload-avatar-label" id="change-avatar-label">تغيير الصورة</label>
+                        <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+                <dl class="profile-grid">
+                    <div>
+                        <dt>الاسم:</dt>
+                        <dd id="profile-name">جاري التحميل...</dd>
+                    </div>
+                     <div>
+                        <dt>البريد الإلكتروني:</dt>
+                        <dd id="profile-email">جاري التحميل...</dd>
+                    </div>
+                     <div>
+                        <dt>نوع الحساب:</dt>
+                        <dd id="profile-usertype">جاري التحميل...</dd>
+                    </div>
+                    <div>
+                        <dt>التقييم:</dt>
+                        <dd id="profile-rating">جاري التحميل...</dd>
+                    </div>
+                    <div>
+                        <dt>عضو منذ:</dt>
+                        <dd id="profile-since">جاري التحميل...</dd>
+                    </div>
+                </dl>
+
+                <h2 class="auth-title" style="font-size: 1.5rem; margin: 2rem 0 1rem 0; padding-top: 1.5rem; border-top: 1px solid var(--border);">التقييمات والآراء</h2>
+                <div id="reviews-container" class="reviews-grid">
+                    <!-- Reviews will be populated here by script.js -->
+                </div>
+                <div id="reviews-placeholder">
+                    <!-- Placeholder will be shown here if there are no reviews -->
+                </div>
+                
+                <h2 id="details-section-title" class="auth-title" style="font-size: 1.5rem; margin: 2rem 0 1rem 0; padding-top: 1.5rem; border-top: 1px solid var(--border);">الملف الشخصي العام</h2>
+
+                <!-- Bio Field -->
+                <div class="product-field-wrapper">
+                    <div class="product-field-view">
+                        <span class="product-field-label">نبذة تعريفية</span>
+                        <div class="product-field-content">
+                            <span id="view-bio" style="white-space: pre-wrap;"></span>
+                            <button class="icon-edit-btn" data-field="bio" title="تعديل">✏️</button>
+                        </div>
+                    </div>
+                    <div class="product-field-edit" data-field="bio" style="display: none;">
+                        <textarea id="edit-bio" class="form-group" rows="4"></textarea>
+                        <div class="edit-actions">
+                            <button class="action-btn save-btn" data-field="bio">💾 حفظ</button>
+                            <button class="action-btn cancel-btn">✖ إلغاء</button>
+                        </div>
+                    </div>
+                </div>
+
+                 <div id="avatarSelection" class="avatar-selection" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem;">
+                  <p>اختر أو غيّر أفاتارك:</p>
+                  <div id="avatarOptionsContainer"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="tab-content" id="ads">
+            <div class="account-card" style="margin-bottom: 0;">
+                 <h2>إعلانات المستخدم</h2>
+                <div class="table-container">
+                    <table class="activity-table">
+                        <thead>
+                            <tr>
+                                <th>العنوان</th>
+                                <th>السعر</th>
+                                <th>تاريخ<br>النشر</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-ads-tbody">
+                            <!-- User's ads will be populated here as table rows -->
+                        </tbody>
+                    </table>
+                </div>
+                 <div id="user-ads-placeholder">
+                    <!-- Placeholder will be shown here if table is empty -->
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="messages">
+             <div class="account-card" style="margin-bottom: 0;">
+                <h2 class="table-main-title">منصة التعاملات</h2>
+                <div id="inbox-container">
+                    <!-- Messages will be populated here by script.js -->
+                </div>
+                <div id="user-messages-placeholder">
+                    <!-- Placeholder will be shown here if the container is empty -->
+                </div>
+             </div>
+        </div>
+        
+        <div class="tab-content" id="inbox">
+            <div class="account-card" style="margin-bottom: 0;">
+                <h2 class="table-main-title">صندوق البريد الخاص</h2>
+                <div class="private-inbox-container">
+                    <div class="inbox-messages-display">
+                        <p style="text-align:center; color: var(--muted-foreground); margin: auto;">
+                            هذا هو صندوق البريد الخاص بك مع هذا المستخدم.
+                        </p>
+                    </div>
+                    <div class="inbox-input-area">
+                        <textarea id="inbox-message-input" placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
+                        <button id="inbox-send-btn" class="auth-button">إرسال</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 DzBigbuy. جميع الحقوق محفوظة. <a href="admin.html" style="color: var(--muted-foreground);">معلومات</a></p>
+        </div>
+    </footer>
+    
+    <audio id="msgSound" style="display: none;">
+      <source src="https://firebasestorage.googleapis.com/v0/b/studio-7316459997-f5ae3.appspot.com/o/assets%2Fnotification.mp3?alt=media&token=c1c8c5c3-0498-4a57-8898-15494c39832d" type="audio/mpeg">
+    </audio>
+
+    <script src="script.js"></script>
+</body>
+</html>

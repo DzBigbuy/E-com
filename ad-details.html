@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل الإعلان - DzBigbuy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+</head>
+<body id="ad-details-page-body">
+    <header class="header">
+        <div class="container">
+            <div class="header-main">
+                <div class="logo-wrapper">
+                    <a href="index.html" class="logo">DzBigbuy</a>
+                    <span class="tagline">موقع الوساطة الأول<br>في الجزائر</span>
+                </div>
+                <div id="auth-container">
+                    <!-- This will be populated by script.js -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- حاوية الإشعارات -->
+    <div id="toast-container" style="
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      width: 300px;
+      z-index: 9999;
+    "></div>
+
+    <main class="container">
+        <nav class="navigation" style="justify-content: center; margin-bottom: 2rem; padding-top: 2rem;">
+            <a href="trader-ads.html">إعلانات<br>التجار</a>
+            <a href="marketer-ads.html">إعلانات<br>المسوقين</a>
+        </nav>
+        <div id="ad-details-container" class="auth-page">
+            <!-- Ad details will be loaded here by script.js -->
+            <div class="ad-detail-card">
+                 <div class="skeleton-text" style="height: 2.5rem; width: 70%; margin-bottom: 1rem;"></div>
+                 <div class="skeleton-text" style="height: 1rem; width: 50%; margin-bottom: 2rem;"></div>
+                 <div class="skeleton-text" style="height: 8rem; width: 100%; margin-bottom: 2rem;"></div>
+                 <div class="skeleton-footer" style="height: 3rem; width: 50%; margin: 0 auto;"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 DzBigbuy. جميع الحقوق محفوظة. <a href="admin.html" style="color: var(--muted-foreground);">معلومات</a></p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

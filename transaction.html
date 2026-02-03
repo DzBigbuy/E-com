@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحة المعاملة - DzBigbuy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-main">
+                <div class="logo-wrapper">
+                    <a href="index.html" class="logo">DzBigbuy</a>
+                    <span class="tagline">موقع الوساطة الأول<br>في الجزائر</span>
+                </div>
+                <div id="auth-container">
+                    <!-- This will be populated by script.js -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 2rem; padding-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; position: relative; gap: 0.5rem; margin-bottom: 2rem;">
+            <div style="flex-grow: 1; text-align: right;">
+                <h1 class="auth-title" style="margin: 0;" id="transaction-title">المنصة</h1>
+                <p id="transaction-subtitle" style="font-size: 0.9rem; color: var(--muted-foreground); margin-top: 0.25rem; margin-bottom: 0;"></p>
+            </div>
+            <div class="chat-header-left">
+                <button id="transactionMenuBtn" class="chat-menu-btn">⋮</button>
+                <div id="transactionMenu" class="chat-menu hidden">
+                    <!-- Menu items will be populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <div id="participant-profiles" class="participant-profiles" style="display: none; margin-bottom: 2rem;">
+            <!-- JS will populate this -->
+        </div>
+
+        <div id="transaction-content" style="display: none;">
+            
+            <div class="top-counters">
+                <!-- Sales Counter -->
+                <div class="counter-item">
+                    <div class="progress-circle" id="sales-circle" style="--progress: 0; --color: hsl(140, 60%, 50%);">
+                        <div class="progress-circle-inner">
+                            <span class="progress-text" id="sales-text">...</span>
+                        </div>
+                    </div>
+                    <span class="counter-label">عداد المبيعات</span>
+                </div>
+                <!-- Time Counter -->
+                <div class="counter-item">
+                    <div class="progress-circle" id="time-circle" style="--progress: 0; --color: hsl(var(--primary-hsl));">
+                        <div class="progress-circle-inner">
+                            <span class="progress-text" id="time-text">...</span>
+                        </div>
+                    </div>
+                    <span class="counter-label">عداد الوقت</span>
+                </div>
+            </div>
+
+            <div class="bottom-cards">
+                <!-- Sales Card -->
+                <a id="sales-management-link" href="#" class="card">
+                  <div style="font-size: 2.5rem">💰</div>
+                  <span>المبيعات</span>
+                </a>
+    
+                <!-- Product Card -->
+                <a id="product-management-link" href="#" class="card">
+                  <div style="font-size: 2.5rem">📦</div>
+                  <span>السلعة</span>
+                </a>
+            </div>
+
+        </div>
+
+        <div id="loading-placeholder">
+            <p style="text-align: center; color: var(--muted-foreground);">جاري تحميل بيانات المعاملة...</p>
+        </div>
+         <div id="error-placeholder" style="display: none;">
+            <p style="text-align: center; color: var(--error);"></p>
+        </div>
+
+        <!-- Rating Section (hidden by default) -->
+        <div id="rating-section" class="account-card" style="display: none; margin-top: 2rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+            <h3 id="rating-title" style="font-size: 1.3rem; color: var(--primary); margin-top: 0; margin-bottom: 1.5rem; text-align: center;">⭐ قيّم هذا التعامل</h3>
+            <div class="form-group">
+                <label for="rating-stars">التقييم:</label>
+                <select id="rating-stars" style="background-color: var(--muted); border-color: var(--border);">
+                    <option value="5">⭐⭐⭐⭐⭐</option>
+                    <option value="4">⭐⭐⭐⭐</option>
+                    <option value="3">⭐⭐⭐</option>
+                    <option value="2">⭐⭐</option>
+                    <option value="1">⭐</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="rating-comment">تعليق (اختياري):</label>
+                <textarea id="rating-comment" placeholder="اكتب رأيك هنا..." style="background-color: var(--muted); border-color: var(--border);"></textarea>
+            </div>
+            <div id="rating-error" class="error-message"></div>
+            <button id="submit-rating-btn" class="auth-button" style="width: 100%;">إرسال التقييم</button>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 DzBigbuy. جميع الحقوق محفوظة. <a href="admin.html" style="color: var(--muted-foreground);">معلومات</a></p>
+        </div>
+    </footer>
+
+    <!-- New Modal for Image Viewer -->
+    <div id="image-viewer-modal" class="image-viewer-modal hidden">
+        <span class="image-viewer-close">&times;</span>
+        <button class="image-viewer-nav prev" title="السابق">&#10094;</button>
+        <div class="image-viewer-content">
+            <img id="modal-image-content" src="" alt="Product Image">
+            <a id="modal-download-btn" href="#" download class="modal-download-btn">⬇ تحميل الصورة</a>
+        </div>
+        <button class="image-viewer-nav next" title="التالي">&#10095;</button>
+    </div>
+    
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const firebaseConfig = {
+                apiKey: "AIzaSyBR4q9dem2cVUY-r7bSwzsLQV4M2LNi4zQ",
+                authDomain: "studio-7316459997-f5ae3.firebaseapp.com",
+                projectId: "studio-7316459997-f5ae3",
+                storageBucket: "studio-7316459997-f5ae3.appspot.com",
+                messagingSenderId: "647609073070",
+                appId: "1:647609073070:web:d17c6eee6a15eb42a45c3f"
+            };
+
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+            const db = firebase.firestore();
+            const auth = firebase.auth();
+            const ADMIN_UID = "WEOFvjCGEwTQ52YJAuIcmOk3ZDB2";
+            
+            // Main page elements
+            const transactionTitleEl = document.getElementById('transaction-title');
+            const transactionSubtitleEl = document.getElementById('transaction-subtitle');
+            const transactionContentEl = document.getElementById('transaction-content');
+            const loadingPlaceholderEl = document.getElementById('loading-placeholder');
+            const errorPlaceholderEl = document.getElementById('error-placeholder');
+
+            const timeCircle = document.getElementById('time-circle');
+            const timeText = document.getElementById('time-text');
+            const salesCircle = document.getElementById('sales-circle');
+            const salesText = document.getElementById('sales-text');
+            
+            const transactionMenuBtn = document.getElementById('transactionMenuBtn');
+            const transactionMenu = document.getElementById('transactionMenu');
+
+            const salesManagementLink = document.getElementById('sales-management-link');
+            const productManagementLink = document.getElementById('product-management-link');
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const transactionId = urlParams.get('id');
+            const transactionNumberFromUrl = urlParams.get('num');
+            
+            let currentTransaction = null;
+
+            // Display the number immediately if available in the URL
+            if (transactionSubtitleEl && transactionNumberFromUrl) {
+                transactionSubtitleEl.textContent = `المعاملة رقم (${transactionNumberFromUrl})`;
+            }
+
+            function showError(message) {
+                loadingPlaceholderEl.style.display = 'none';
+                transactionContentEl.style.display = 'none';
+                errorPlaceholderEl.style.display = 'block';
+                if(errorPlaceholderEl.querySelector('p')) {
+                    errorPlaceholderEl.querySelector('p').textContent = message;
+                }
+            }
+
+            async function getPublicProfile(uid) {
+                if (!uid) return null;
+                try {
+                    const publicRef = db.doc(`users/${uid}/public/profile`);
+                    const doc = await publicRef.get();
+                    return doc.exists ? doc.data() : null;
+                } catch (error) {
+                    console.error(`Error fetching public profile for ${uid}:`, error);
+                    return null;
+                }
+            }
+            
+            if (!transactionId) {
+                showError("معرّف المعاملة غير موجود في الرابط.");
+                return;
+            }
+
+            async function updateUserRating(uid) {
+                if (!uid) return;
+                try {
+                    const snap = await db.collection("ratings").where("toUid", "==", uid).get();
+                    let totalStars = 0;
+                    snap.forEach(doc => { totalStars += doc.data().stars; });
+                    const ratingCount = snap.size;
+                    const avgRating = ratingCount > 0 ? (totalStars / ratingCount).toFixed(1) : 0;
+                    
+                    await db.doc(`users/${uid}/public/profile`).set({
+                        rating: Number(avgRating),
+                        ratingCount: ratingCount
+                    }, { merge: true });
+                } catch (error) {
+                    console.error(`Error updating rating for user ${uid}:`, error);
+                }
+            }
+
+            async function submitRating(fromUid, toUid, transactionId) {
+                if (!fromUid || !toUid || !transactionId) return;
+
+                const submitRatingBtn = document.getElementById('submit-rating-btn');
+                submitRatingBtn.disabled = true;
+                submitRatingBtn.textContent = 'جاري الإرسال...';
+                
+                const ratingError = document.getElementById('rating-error');
+                if(ratingError) ratingError.textContent = '';
+
+                // Get fresh references to elements inside the handler
+                const ratingStarsEl = document.getElementById('rating-stars');
+                const ratingCommentEl = document.getElementById('rating-comment');
+
+                const stars = parseInt(ratingStarsEl.value, 10);
+                const comment = ratingCommentEl.value.trim();
+
+                if (isNaN(stars) || stars < 1 || stars > 5) {
+                    if(ratingError) ratingError.textContent = 'يرجى اختيار تقييم صالح.';
+                    submitRatingBtn.disabled = false;
+                    submitRatingBtn.textContent = 'إرسال التقييم';
+                    return;
+                }
+
+                try {
+                    await db.collection("ratings").add({
+                        fromUid,
+                        toUid,
+                        transactionId,
+                        stars,
+                        comment,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    await updateUserRating(toUid);
+                    alert("تم إرسال التقييم بنجاح. شكراً لك!");
+                    
+                    const ratingSection = document.getElementById('rating-section');
+                    if(ratingSection) ratingSection.style.display = 'none';
+
+                } catch (error) {
+                    console.error("Error submitting rating:", error);
+                    if(ratingError) ratingError.textContent = 'فشل إرسال التقييم. ' + error.message;
+                    submitRatingBtn.disabled = false;
+                    submitRatingBtn.textContent = 'إرسال التقييم';
+                }
+            }
+
+
+            async function checkAndShowRating(currentUser, transaction, ownerProfile, marketerProfile) {
+                const ratingSection = document.getElementById('rating-section');
+                if (!ratingSection) return;
+
+                const isOwner = currentUser.uid === transaction.adOwnerUid;
+                const otherUserUid = isOwner ? transaction.marketerUid : transaction.adOwnerUid;
+                const otherUserProfile = isOwner ? marketerProfile : ownerProfile;
+
+                if (!otherUserUid || !otherUserProfile) {
+                    console.log("Could not determine other user for rating.");
+                    return;
+                }
+                
+                const ratingQuery = db.collection("ratings")
+                    .where("transactionId", "==", transactionId)
+                    .where("fromUid", "==", currentUser.uid);
+                    
+                const ratingSnap = await ratingQuery.get();
+
+                if (ratingSnap.empty) {
+                    const ratingTitle = document.getElementById('rating-title');
+                    const submitRatingBtn = document.getElementById('submit-rating-btn');
+                    
+                    ratingSection.style.display = 'block';
+                    if (ratingTitle) ratingTitle.textContent = `⭐ قيّم تعاملك مع ${otherUserProfile.username}`;
+                    if (submitRatingBtn) submitRatingBtn.onclick = () => submitRating(currentUser.uid, otherUserUid, transactionId);
+                } else {
+                    ratingSection.style.display = 'none';
+                }
+            }
+
+            function renderParticipantProfiles(ownerProfile, marketerProfile, transaction) {
+                const container = document.getElementById('participant-profiles');
+                if (!container || !ownerProfile || !marketerProfile || !transaction) {
+                    if(container) container.style.display = 'none';
+                    return;
+                }
+                
+                const ownerFirstName = (ownerProfile.username || '').split(' ')[0];
+                const marketerFirstName = (marketerProfile.username || '').split(' ')[0];
+
+                const ownerAvatarContent = (ownerProfile.avatar || '').startsWith('http') 
+                    ? `<img src="${ownerProfile.avatar}" alt="${ownerProfile.username}" />` 
+                    : (ownerProfile.avatar || '👤');
+
+                const marketerAvatarContent = (marketerProfile.avatar || '').startsWith('http') 
+                    ? `<img src="${marketerProfile.avatar}" alt="${marketerProfile.username}" />`
+                    : (marketerProfile.avatar || '👤');
+
+                container.innerHTML = `
+                    <a href="account.html?uid=${transaction.adOwnerUid}" class="participant-link">
+                        <div class="participant-avatar">${ownerAvatarContent}</div>
+                        <span class="participant-name">${ownerFirstName}</span>
+                    </a>
+                    <span class="participant-separator">🤝</span>
+                    <a href="account.html?uid=${transaction.marketerUid}" class="participant-link">
+                        <div class="participant-avatar">${marketerAvatarContent}</div>
+                        <span class="participant-name">${marketerFirstName}</span>
+                    </a>
+                `;
+
+                container.style.display = 'flex';
+            }
+            
+            auth.onAuthStateChanged(user => {
+                if (!user) {
+                    window.location.href = `login.html?redirect=transaction.html?id=${transactionId}`;
+                    return;
+                }
+
+                const transactionRef = db.collection('transactions').doc(transactionId);
+                
+                let timerInterval = null;
+
+                const unsubscribe = transactionRef.onSnapshot(async doc => {
+                    if (timerInterval) clearInterval(timerInterval);
+
+                    if (!doc.exists) {
+                        showError("المعاملة المطلوبة غير موجودة أو ليس لديك صلاحية لعرضها.");
+                        return;
+                    }
+
+                    currentTransaction = doc.data();
+                    const currentUserUid = user.uid;
+
+                    if (currentUserUid !== currentTransaction.adOwnerUid && currentUserUid !== currentTransaction.marketerUid && currentUserUid !== ADMIN_UID) {
+                        showError("ليس لديك صلاحية مشاهدة هذه المعاملة.");
+                        return;
+                    }
+
+                    loadingPlaceholderEl.style.display = 'none';
+                    transactionContentEl.style.display = 'block';
+                    errorPlaceholderEl.style.display = 'none';
+                    
+                    if (transactionTitleEl) {
+                        transactionTitleEl.textContent = 'المنصة';
+                    }
+
+                    // --- Display Transaction Number (with fallback) ---
+                    const numberToDisplay = transactionNumberFromUrl || currentTransaction.transactionNumber;
+                    if (transactionSubtitleEl) {
+                        if (numberToDisplay) {
+                            transactionSubtitleEl.textContent = `المعاملة رقم (${numberToDisplay})`;
+                        } else if (!transactionNumberFromUrl) { // Only clear if no URL param was ever present
+                            transactionSubtitleEl.textContent = ''; 
+                        }
+                    }
+
+                    const [ownerProfile, marketerProfile, currentUserProfile] = await Promise.all([
+                        getPublicProfile(currentTransaction.adOwnerUid),
+                        getPublicProfile(currentTransaction.marketerUid),
+                        getPublicProfile(currentUserUid)
+                    ]);
+                    
+                    renderParticipantProfiles(ownerProfile, marketerProfile, currentTransaction);
+                    
+                    if (productManagementLink && ownerProfile) {
+                        const traderUid = (ownerProfile.role === 'trader') ? currentTransaction.adOwnerUid : currentTransaction.marketerUid;
+                        productManagementLink.href = `my-product.html?merchantUid=${traderUid}`;
+                    }
+
+
+                    if (salesManagementLink) {
+                        salesManagementLink.href = `sales-management.html?id=${transactionId}`;
+                        const titleEl = salesManagementLink.querySelector('span');
+                        if (currentUserProfile && currentUserProfile.role === 'marketer') {
+                            if (titleEl) titleEl.textContent = 'إدارة المبيعات';
+                        } else {
+                            if (titleEl) titleEl.textContent = 'عرض المبيعات';
+                        }
+                    }
+                    
+                    let menuHtml = `
+                        <a href="ad-details.html?id=${currentTransaction.adId}" class="chat-menu-item">
+                            <span>📢</span>
+                            <span>تفاصيل الإعلان</span>
+                        </a>
+                    `;
+
+                     if (ownerProfile) {
+                        const avatarContent = (ownerProfile.avatar || '').startsWith('http') ? `<img src="${ownerProfile.avatar}" alt="${ownerProfile.username}" />` : (ownerProfile.avatar || '👤');
+                        menuHtml += `
+                            <a href="account.html?uid=${currentTransaction.adOwnerUid}" class="chat-menu-item">
+                                <div class="menu-avatar">${avatarContent}</div>
+                                <span>${ownerProfile.username} (صاحب الإعلان)</span>
+                            </a>
+                        `;
+                    }
+
+                    if (marketerProfile) {
+                        const avatarContent = (marketerProfile.avatar || '').startsWith('http') ? `<img src="${marketerProfile.avatar}" alt="${marketerProfile.username}" />` : (marketerProfile.avatar || '👤');
+                        menuHtml += `
+                            <a href="account.html?uid=${currentTransaction.marketerUid}" class="chat-menu-item">
+                                <div class="menu-avatar">${avatarContent}</div>
+                                <span>${marketerProfile.username} (طالب التعامل)</span>
+                            </a>
+                        `;
+                    }
+                    
+                    if (transactionMenu) transactionMenu.innerHTML = menuHtml;
+                    
+                    // --- Counters & Rating Logic ---
+                    
+                    const salesCurrent = currentTransaction.currentSales || 0;
+                    const salesTotal = currentTransaction.maxSales || 1;
+                    const salesProgress = salesTotal > 0 ? Math.min(1, salesCurrent / salesTotal) : 0;
+                    salesCircle.style.setProperty('--progress', salesProgress);
+                    salesText.innerHTML = `<div style="font-size: 1.5rem; line-height: 1;">📈</div>${salesCurrent} / ${salesTotal}`;
+                    
+                    if (timeCircle && timeText && currentTransaction.endAt) {
+                         timerInterval = setInterval(() => {
+                            const now = new Date();
+                            const end = currentTransaction.endAt.toDate();
+                            const diff = end.getTime() - now.getTime();
+                            const isTimeUp = diff <= 0;
+                            const areSalesComplete = salesTotal > 0 && salesCurrent >= salesTotal;
+
+                            if (isTimeUp || areSalesComplete) {
+                                checkAndShowRating(user, currentTransaction, ownerProfile, marketerProfile);
+                            }
+
+                            if (isTimeUp) {
+                                timeText.innerHTML = `<div style="font-size: 1.5rem; line-height: 1;">⏳</div>انتهى الوقت`;
+                                timeCircle.style.setProperty('--progress', 1);
+                                clearInterval(timerInterval);
+                                return;
+                            }
+                            
+                            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            timeText.innerHTML = `<div style="font-size: 1.5rem; line-height: 1;">⏳</div>${days} يوم<br>${hours} ساعة`;
+                            
+                            const start = currentTransaction.startAt.toDate();
+                            const totalDuration = end.getTime() - start.getTime();
+                            const elapsed = now.getTime() - start.getTime();
+                            const timeProgress = totalDuration > 0 ? Math.min(1, elapsed / totalDuration) : 0;
+                            
+                            timeCircle.style.setProperty('--progress', timeProgress);
+                        }, 1000);
+                    } else if (timeText) {
+                        timeText.textContent = "غير محدد";
+                    }
+
+                }, error => {
+                    console.error("Error fetching transaction: ", error);
+                    showError("حدث خطأ أثناء جلب بيانات المعاملة. قد لا تملك الصلاحية الكافية.");
+                });
+
+
+                if (transactionMenuBtn && transactionMenu) {
+                    transactionMenuBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        transactionMenu.classList.toggle('hidden');
+                    });
+                    document.addEventListener('click', (e) => {
+                        if (!transactionMenu.contains(e.target) && !transactionMenuBtn.contains(e.target)) {
+                            transactionMenu.classList.add('hidden');
+                        }
+                    });
+                }
+
+                window.addEventListener('beforeunload', unsubscribe);
+            });
+        });
+    </script>
+</body>
+</html>

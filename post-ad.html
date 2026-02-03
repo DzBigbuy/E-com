@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة إعلان جديد - DzBigbuy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-main">
+                <div class="logo-wrapper">
+                    <a href="index.html" class="logo">DzBigbuy</a>
+                    <span class="tagline">موقع الوساطة الأول<br>في الجزائر</span>
+                </div>
+                <div id="auth-container">
+                    <!-- This will be populated by script.js -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- حاوية الإشعارات -->
+    <div id="toast-container" style="
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      width: 300px;
+      z-index: 9999;
+    "></div>
+
+    <main class="container">
+        <nav class="navigation" style="justify-content: center; margin-bottom: 2rem; padding-top: 2rem;">
+            <a href="trader-ads.html">إعلانات<br>التجار</a>
+            <a href="marketer-ads.html">إعلانات<br>المسوقين</a>
+        </nav>
+        <div class="auth-page">
+            <div class="auth-card">
+                <h1 class="auth-title">إضافة إعلان جديد</h1>
+                <p id="post-ad-subtitle" class="auth-subtitle">املأ التفاصيل أدناه لنشر إعلانك</p>
+
+                <div id="post-ad-loading" style="text-align: center; display: none;">
+                    <p>جاري تحميل النموذج...</p>
+                </div>
+                
+                <form id="post-ad-form" class="auth-form" style="display: none;">
+                    <h2 class="auth-title" style="font-size: 1.5rem; margin: 0 0 1rem 0; text-align: right; border: none; padding: 0;">تفاصيل الإعلان</h2>
+                    <div class="form-group">
+                        <label for="title">عنوان الإعلان</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                     <div class="form-group">
+                        <label for="description" id="description-label">...</label> <!-- Label set by JS -->
+                        <textarea id="description" name="description" required rows="4" placeholder="..."></textarea> <!-- Placeholder set by JS -->
+                    </div>
+                    <div class="form-group" style="display: none;">
+                        <label for="category">الفئة</label>
+                        <input type="text" id="category" name="category" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pricePerSale">العمولة لكل عملية بيع (دج)</label>
+                        <input type="number" id="pricePerSale" name="pricePerSale" required dir="ltr" class="text-left">
+                    </div>
+                    <div class="form-group">
+                        <label for="maxSales">الحد الأقصى للمبيعات المستهدفة</label>
+                        <input type="number" id="maxSales" name="maxSales" required dir="ltr" class="text-left">
+                    </div>
+                    <div class="form-group">
+                        <label for="price">السعر الإجمالي للإعلان (دج)</label>
+                        <input type="number" id="price" name="price" required dir="ltr" class="text-left">
+                    </div>
+                    <div class="form-group">
+                        <label for="goalDays">مدة الحملة بالأيام</label>
+                        <input type="number" id="goalDays" name="goalDays" required dir="ltr" class="text-left">
+                    </div>
+
+                    <!-- Trader-specific product fields -->
+                    <div id="trader-fields" style="display: none;">
+                        <h2 class="auth-title" style="font-size: 1.5rem; margin: 2rem 0 1rem 0; padding-top: 1.5rem; border-top: 1px solid var(--border); text-align: right;">تفاصيل السلعة</h2>
+                        <div class="form-group">
+                            <label for="productName">اسم السلعة</label>
+                            <input type="text" id="productName" name="productName">
+                        </div>
+                        <div class="form-group">
+                            <label for="productDescription">وصف السلعة</label>
+                            <textarea id="productDescription" name="productDescription" rows="5" placeholder="صف سلعتك بدقة حتى تحصل على مبيعات أكثر"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="productPrice">سعر السلعة (دج)</label>
+                            <input type="number" id="productPrice" name="productPrice" dir="ltr" class="text-left">
+                        </div>
+                        <div class="form-group">
+                            <label for="productImages">صور السلعة</label>
+                            <input type="file" id="productImages" name="productImages" class="file-input-custom" accept="image/*" multiple>
+                        </div>
+                        <div class="form-group">
+                            <label for="productColors">الألوان المتاحة (افصل بينها بفاصلة)</label>
+                            <input type="text" id="productColors" name="productColors" placeholder="أحمر, أزرق, أسود...">
+                        </div>
+                        <div class="form-group">
+                            <label for="productSizes">المقاسات المتاحة (افصل بينها بفاصلة)</label>
+                            <input type="text" id="productSizes" name="productSizes" placeholder="S, M, L, XL...">
+                        </div>
+                    </div>
+
+                    <div id="error-message" class="error-message"></div>
+                    <button type="submit" id="post-ad-submit-btn" class="auth-button">نشر الإعلان</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 DzBigbuy. جميع الحقوق محفوظة. <a href="admin.html" style="color: var(--muted-foreground);">معلومات</a></p>
+        </div>
+    </footer>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+</body>
+</html>

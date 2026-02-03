@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حساب جديد - DzBigbuy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-main">
+                <div class="logo-wrapper">
+                    <a href="index.html" class="logo">DzBigbuy</a>
+                    <span class="tagline">موقع الوساطة الأول<br>في الجزائر</span>
+                </div>
+                <div id="auth-container">
+                    <!-- This will be populated by script.js -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- حاوية الإشعارات -->
+    <div id="toast-container" style="
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      width: 300px;
+      z-index: 9999;
+    "></div>
+
+    <main class="container">
+        <nav class="navigation" style="justify-content: center; margin-bottom: 2rem; padding-top: 2rem;">
+            <a href="trader-ads.html">إعلانات<br>التجار</a>
+            <a href="marketer-ads.html">إعلانات<br>المسوقين</a>
+        </nav>
+        <div class="auth-page">
+            <div class="auth-card">
+                <h1 class="auth-title">إنشاء حساب جديد</h1>
+                <p class="auth-subtitle">انضم إلى منصتنا وابدأ في التواصل</p>
+                <form id="register-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="firstName">الاسم الأول</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                     <div class="form-group">
+                        <label for="lastName">الاسم الأخير</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">البريد الإلكتروني</label>
+                        <input type="email" id="email" name="email" required dir="ltr" class="text-left">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">كلمة المرور</label>
+                        <input type="password" id="password" name="password" required dir="ltr" class="text-left">
+                    </div>
+                     <div class="form-group">
+                        <label>نوع الحساب</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="userType" value="trader" checked> تاجر</label>
+                            <label><input type="radio" name="userType" value="marketer"> مسوق</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Trader-specific fields -->
+                    <div id="trader-fields" style="display: none;">
+                        <p class="auth-subtitle" style="margin-top: 2rem; margin-bottom: 1rem; border-top: 1px solid var(--border); padding-top: 1rem; font-weight: bold;">يرجى ملء تفاصيل أول سلعة لك (للتاجر فقط)</p>
+                        <div class="form-group">
+                            <label for="productDescription">اسم السلعة / تعريفها</label>
+                            <textarea id="productDescription" name="productDescription" rows="4" placeholder="اكتب وصفًا تفصيليًا للسلعة..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="productImage">الصور التعريفية للسلعة</label>
+                            <input type="file" id="productImage" name="productImage" class="file-input-custom" accept="image/*" multiple>
+                        </div>
+                        <div class="form-group">
+                            <label for="productColors">الألوان المتاحة (افصل بينها بفاصلة)</label>
+                            <input type="text" id="productColors" name="productColors" placeholder="أحمر, أزرق, أسود...">
+                        </div>
+                        <div class="form-group">
+                            <label for="productSizes">المقاسات المتاحة (افصل بينها بفاصلة)</label>
+                            <input type="text" id="productSizes" name="productSizes" placeholder="S, M, L, XL...">
+                        </div>
+                        <div class="form-group">
+                            <label for="productQuantity">الكمية المتوفرة</label>
+                            <input type="number" id="productQuantity" name="productQuantity" placeholder="100" dir="ltr" class="text-left">
+                        </div>
+                    </div>
+
+                    <div id="avatarSelection" class="avatar-selection">
+                      <p>اختر أفاتارك:</p>
+                      <div id="avatarOptionsContainer"></div>
+                    </div>
+                    <input type="hidden" id="selectedAvatar" name="selectedAvatar" value="">
+
+                    <div id="error-message" class="error-message"></div>
+                    <button type="submit" class="auth-button">إنشاء الحساب</button>
+                </form>
+                <div class="auth-footer">
+                    <p>لديك حساب بالفعل؟ <a href="login.html">سجل الدخول</a></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 DzBigbuy. جميع الحقوق محفوظة. <a href="admin.html" style="color: var(--muted-foreground);">معلومات</a></p>
+        </div>
+    </footer>
+    
+    <!-- Supabase SDK for image upload -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+</body>
+</html>
