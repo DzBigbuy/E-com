@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DzBigbuy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FFC107"/>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-main">
+                <div class="logo-wrapper">
+                    <a href="index.html" class="logo">DzBigbuy</a>
+                    <span class="tagline">موقع الوساطة الأول<br>في الجزائر</span>
+                </div>
+                <div id="auth-container">
+                    <!-- سيتم ملؤه بواسطة script.js بعرض تسجيل الدخول أو الحساب -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- حاوية الإشعارات -->
+    <div id="toast-container" style="
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      width: 300px;
+      z-index: 9999;
+    "></div>
+
+    <main class="container">
+        <nav class="navigation" style="justify-content: center; margin-bottom: 2rem; padding-top: 2rem;">
+            <a href="trader-ads.html">إعلانات<br>التجار</a>
+            <a href="marketer-ads.html">إعلانات<br>المسوقين</a>
+        </nav>
+
+        <!-- قسم Hero -->
+        <section class="hero">
+            <h1>منصة الوساطة <span class="highlight">DzBigbuy</span> تربط التجار بالمسوقين</h1>
+            <p class="subtitle">سجل، انشر إعلانك، ودع المسوقين يجلبون لك العملاء</p>
+            <p class="hero-description">
+                لا تحتاج للبحث عن مسوقين 
+أو التفاوض معهم يدويا. في منصة الوساطة DzBigBuy يعرض التاجر منتجه بشروط واضحة، ويتقدم المسوقون بطلب التعامل، مع حماية كاملة لحقوق الطرفين داخل المنصة. لا مكالمات عشوائية، لا أرقام هاتف، ولا تحويلات خارجية. كل التعاملات من الاتفاق حتى الدفع عبر Baridimob. تتم داخل بيئة واحدة واضحة وآمنة.
+            </p>
+
+            <!-- Accordion Section for Steps -->
+            <div class="steps-container">
+                <div class="step-accordion">
+                    <button class="accordion-header">
+                        <span>خطوات بدأ التاجر</span>
+                        <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <ul>
+                            <li>سجل كـ "تاجر" وأكمل ملفك الشخصي وصورة منتجك.</li>
+                            <li>ضع صور منتجك و مواصفاته بدقة حتى تتحصل على مبيعات أعلى</li>
+                            <li>انشر إعلانًا وحدد ميزانيتك وعمولة المسوق لكل عملية بيع. (يمكنك البدأ بدون إعلان فقط إختر إعلان مسوق يناسبك في قسم إعلانات المسوقون).</li>
+                            <li>وافق على طلبات المسوقين.</li>
+                            <li>قم بتضمين حقك في إسترجاع المبلغ الذي تدفعه في حال عدم تحقق أهداف</li>
+                            <li>تابع تقدم المبيعات التي يحققها المسوقون من لوحة التحكم.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="step-accordion">
+                    <button class="accordion-header">
+                        <span>خطوات بدأ المسوق</span>
+                        <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <ul>
+                            <li>سجل كـ "مسوق" وأكمل ملفك الشخصي و أنشر إعلانك</li>
+                            <li>يمكنك أيضا تصفح إعلانات التجار واختر ما يناسبك للعمل عليه.</li>
+                            <li>ضع تعريفا لسيرتك الداتية و خبرتك  و مايمكنك تقديمه كمسوق</li>
+                            <li>بعد الموافقة، ابدأ التسويق وسجل مبيعاتك لتحصل على عمولتك.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- فيديو تعريفي -->
+            <div class="home-video">
+              <iframe
+                src="https://www.youtube.com/embed/T7-hfQVxpL8"
+                title="DzBuy Platform Video"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+            </div>
+
+            <div id="post-ad-cta-container" class="post-ad-cta">
+                <!-- "Post Ad" button سيتم حقنه بواسطة script.js -->
+            </div>
+
+            <div class="hero-buttons">
+                <a href="post-ad.html" class="post-ad-btn">ابدأ الآن كتاجر – اعرض منتجك بثقة</a>
+                <a href="#" class="secondary-btn">كيف تعمل المنصة؟</a>
+            </div>
+        </section>
+
+        <!-- ميزات المنصة -->
+        <section class="features-section">
+            <h2 class="section-title">منصة وسيطة احترافية تجمع بين التجار والمسوقين في مكان واحد</h2>
+            <p class="section-subtitle">اتفاق واضح، لوحة تحكم لكل طرف، ودفع آمن عبر Baridimob، مع متابعة كل تفاصيل التعامل من صفحة حسابك.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>لماذا ينضم التاجر إلى DzBigBuy ؟</h3>
+                    <ul>
+                        <li>نشر منتجك وتحدد ميزانيتك ونتائجك المطلوبة بوضوح.</li>
+                        <li>المبلغ يبقى محفوظًا داخل المنصة حتى إنجاز العمل المتفق عليه.</li>
+                        <li>يمكنك رفض أو قبول طلبات المسوقين بناءً على خبرتهم وتقييمهم.</li>
+                        <li>كل تعامل موثق في حسابك ويمكن الرجوع إليه في أي وقت.</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h3>الأمان أولا للجانبين</h3>
+                     <ul>
+                        <li>لسنا طرفا في البيع نفسه: نحن طرف وسيط لضمان وصول الأجر عند الإنجاز الكامل، أو استرجاع المبلغ إن لم تتحقق النتائج.</li>
+                        <li>لا أرقام هاتف، لا حسابات اجتماعية، ولا تواصل خارج المنصة حفاظا على الشفافية.</li>
+                        <li>كل شيء يتم داخل لوحة المنصة: الطلبات، التحديثات، وإثباتات الدفع عبر Baridimob.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- لمن هذه المنصة -->
+        <section class="features-section">
+            <h2 class="section-title">لمن هذه المنصة؟</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>للتجار وأصحاب المشاريع</h3>
+                    <p>الذين يريدون زيادة المبيعات دون إضاعة الوقت في التجارب العشوائية وبأعلى مستوى من الأمان.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>للمسوقين المحترفين</h3>
+                    <p>الذين يبحثون عن فرص واضحة بأجر مضمون مقابل نتائج قابلة للقياس.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم Call to Action -->
+        <section class="cta-section">
+            <h2>جاهز لبدء رحلتك؟</h2>
+            <p>سجل كتاجر واعرض منتجاتك، أو كمسوق وابحث عن فرص مميزة للعمل مع تجار موثوقين.</p>
+            <div class="cta-buttons">
+                <a href="register.html" class="post-ad-btn">سجل كتاجر</a>
+                <a href="register.html" class="secondary-btn">سجل كمسوق</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 DzBigbuy. جميع الحقوق محفوظة. <a href="admin.html" style="color: var(--muted-foreground);">معلومات</a></p>
+        </div>
+    </footer>
+
+    <!-- JS Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>
