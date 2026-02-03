@@ -1,116 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المحادثة - DzBigbuy</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-</head>
-<body>
-    <div id="toast-container" class="toast hidden"></div>
-    <div class="chat-container">
-        <!-- رأس الشات -->
-        <div class="chat-header">
-            <a href="account.html" class="back-button">→</a>
-            <div class="chat-header-title-container">
-                <a id="chat-ad-link" href="#" class="chat-ad-link" style="display: none;">تفاصيل إعلان هذه المحادثة</a>
-            </div>
-            <div class="chat-header-left">
-                <button id="chatMenuBtn" class="chat-menu-btn">⋮</button>
-                <div id="chatMenu" class="chat-menu hidden">
-                    <div class="chat-menu-item" id="openProfile">
-                        <div id="menuAvatar" class="menu-avatar"></div>
-                        <span id="menuUsername">Profile</span>
-                    </div>
-                    <div class="chat-menu-item" id="searchMessages">
-                        <span>🔍</span>
-                        <span>البحث في المحادثة</span>
-                    </div>
-                    <div class="chat-menu-item" id="searchImages">
-                        <span>🖼️</span>
-                        <span>البحث في صور المحادثة</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ملخص الصفقة -->
-        <div id="dealSummary" class="deal-summary hidden">
-          <h4>🧾 ملخص الصفقة</h4>
-        
-          <div class="deal-row">
-            <span>📦 الإعلان:</span>
-            <strong id="dealAdTitle"></strong>
-          </div>
-        
-          <div class="deal-row">
-            <span>💰 السعر:</span>
-            <strong id="dealPrice"></strong>
-          </div>
-        
-          <div class="deal-row">
-            <span>📌 الحالة:</span>
-            <strong id="dealStatus"></strong>
-          </div>
-        
-          <div class="deal-row">
-            <span>📅 البداية:</span>
-            <span id="dealStart"></span>
-          </div>
-        
-          <div class="deal-row" id="dealCloseRow" style="display:none;">
-            <span>📅 الإغلاق:</span>
-            <span id="dealClose"></span>
-          </div>
-        
-          <button id="closeDealBtn" class="close-deal-btn hidden">
-            إغلاق الصفقة
-          </button>
-        </div>
-
-        <!-- الرسائل -->
-        <div id="chat-messages" class="chat-messages">
-            <!-- الرسائل تُضاف هنا -->
-            <p style="text-align:center; color: var(--muted-foreground); margin: auto;">جاري تحميل الرسائل...</p>
-        </div>
-
-        <!-- صندوق معاينة الصورة -->
-        <div id="imagePreviewBox" class="image-preview hidden">
-            <img id="previewImage" src="" alt="Image Preview">
-            <div class="preview-actions">
-                <button id="confirmImage" class="table-action-btn approve-btn" style="color: white;">✔ إرسال</button>
-                <button id="cancelImage" class="table-action-btn reject-btn" style="color: white;">❌ إلغاء</button>
-            </div>
-        </div>
-
-        <!-- شريط الإرسال -->
-        <div class="chat-input-area">
-             <input type="file" id="file-input" accept="image/*" hidden>
-            <button id="attach-button" title="إرفاق صورة">📎</button>
-            <input
-              type="text"
-              id="chat-input"
-              placeholder="اكتب رسالتك..."
-            />
-            <button id="send-btn" title="إرسال" disabled>➤</button>
-        </div>
-    </div>
-    
-    <!-- Modal لعرض الصورة بحجم كامل -->
-    <div id="imageModal" class="image-modal hidden">
-        <img id="modalImage" src="" alt="Full size image">
-    </div>
-    
-    <script src="script.js"></script>
-    <script src="chat.js"></script>
-</body>
-</html>
